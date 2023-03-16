@@ -25,6 +25,5 @@ variable "managed_policy_arns" {
 variable "github_org_name" {
   description = "Name of the Github Organisation and Github Repository where the Github Actions will be triggered. (eg. octo-org/octo-repo)"
   type        = string
-  default     = "VFS-Digital-Channels/static-ui-cicd-test"
+  default     = "FabioSVBBD/terraform-learning"
 }
-
