@@ -1,6 +1,8 @@
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    branches: main
 
 jobs:
   terraform:
@@ -58,15 +60,19 @@ jobs:
 
             </details>
 
-            *Pushed by: @${{ github.actor }}, Action: `${{ github.event_name }}\`*`;
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
-              repo: context.repo.repo
+              repo: context.repo.repo,
               body: output
             })
 
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false

@@ -1,4 +1,12 @@
 terraform {
+  cloud {
+    organization = "fabiosv-bbd-org"
+
+    workspaces {
+      name = "gh-actions-demo"
+    }
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
