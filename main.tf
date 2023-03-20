@@ -7,8 +7,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "test-tf-state-container"    # your bucket
-    key    = "tl-state/terraform.tfstate" # your key
+    bucket = "" # your bucket
+    key    = "" # your key
     region = "af-south-1"
   }
 }
