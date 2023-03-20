@@ -1,4 +1,4 @@
-Name: Terraform Plan
+name: Terraform Plan
 
 on:
   pull_request:
@@ -11,6 +11,8 @@ jobs:
 
     permissions:
       pull-requests: write
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout
@@ -25,7 +27,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: ${{ secrets.AWS_ASSUME_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: af-south-1
 
       - name: Terraform Format
         id: fmt
@@ -41,13 +43,13 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform pla -no-color -input=false
+        run: terraform plan -no-color -input=false
         continue-on-error: true
 
       - name: Update Pull Request
         uses: actions/github-script@v6
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: "terraform\n--${{ steps.plan.outputs.stdout }}--"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -74,5 +76,5 @@ jobs:
             })
 
       - name: Terraform Plan Status
-        if: steps.plan.outcome === 'failure'
+        if: steps.plan.outcome == 'failure'
         run: exit 1
